@@ -12,7 +12,8 @@ cd app
 docker login -u ${docker_username} -p ${docker_pass}
 docker pull maven:3-jdk-11
 export AWS_ACCOUNT_ID=`aws sts get-caller-identity --query "Account" --output text`
-echo $AWS_ACCESS_KEY_ID
+echo "AWS Access key:" $AWS_ACCESS_KEY_ID
+echo "AWS Account ID:" $AWS_ACCOUNT_ID
 docker build . -t $IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION --build-arg AWS_REGION=$AWS_REGION -f Dockerfile
 docker tag $IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
 docker tag $IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
