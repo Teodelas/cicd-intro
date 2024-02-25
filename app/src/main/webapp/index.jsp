@@ -15,7 +15,7 @@ div {text-align: center;}
 <body>
 
 <h1>Attack Path Lab</h1>
-<p>This is Attack Path Testing Lab Vulnerable Application.</p>
+<p>This is Attack Path Testing Lab Vulnerable Application. Updated</p>
 <div>Sample exploitable application.
 <s:a id="%{id}">your input id: ${id}
 </s:a>
