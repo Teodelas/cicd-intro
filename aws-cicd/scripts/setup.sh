@@ -9,10 +9,11 @@ export AWS_REGION=$AWS_DEFAULT_REGION
 export AWS_ACCOUNT_ID=`aws sts get-caller-identity --query "Account" --output text`
 aws sts get-caller-identity
 export EKS_CODEBUILD_ROLE_ARN=`aws sts get-caller-identity | jq -r '.Arn'`
+echo $EKS_CODEBUILD_ROLE_ARN
 helm version
 mkdir ~/.kube/
 echo "starting update-kubeconfig"
-aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $EKS_CLUSTER_NAME
+aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $EKS_CLUSTER_NAME --role-arn $ASSUME_ROLE_ARN
 echo "starting kubectl version"
 kubectl version --output=json
 kubectl get pods
