@@ -1,8 +1,10 @@
 #!/bin/bash
-key_id=$(echo $AWS_KEY_ID | jq '.aws_key_id' | tr -d '"') 
-key_secret=$(echo $AWS_KEY_ID | jq '.aws_key_secret' | tr -d '"')
-export AWS_ACCESS_KEY_ID=$key_id
-export AWS_SECRET_ACCESS_KEY=$key_secret
+ASSUME_ROLE_ARN="arn:aws:iam::533267025020:role/CodeBuildAdmin"
+TEMP_ROLE=$(aws sts assume-role --role-arn $ASSUME_ROLE_ARN --role-session-name test)
+export TEMP_ROLE
+export AWS_ACCESS_KEY_ID=$(echo "${TEMP_ROLE}" | jq -r '.Credentials.AccessKeyId')
+export AWS_SECRET_ACCESS_KEY=$(echo "${TEMP_ROLE}" | jq -r '.Credentials.SecretAccessKey')
+export AWS_SESSION_TOKEN=$(echo "${TEMP_ROLE}" | jq -r '.Credentials.SessionToken')
 export AWS_REGION=$AWS_DEFAULT_REGION
 export AWS_ACCOUNT_ID=`aws sts get-caller-identity --query "Account" --output text`
 aws sts get-caller-identity
