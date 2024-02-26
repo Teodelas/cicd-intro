@@ -13,5 +13,7 @@ helm version
 mkdir ~/.kube/
 echo "starting update-kubeconfig"
 aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $EKS_CLUSTER_NAME
+echo "starting kubectl version"
 kubectl version --output=json
+kubectl get pods
 echo "Setup Done !!"
