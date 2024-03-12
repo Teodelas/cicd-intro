@@ -675,7 +675,7 @@
                         }
                     ],
                     "MetadataOptions": {
-                        "HttpTokens": "optional"
+                        "HttpTokens": "required"
                     }
 		  		}
 		    }
