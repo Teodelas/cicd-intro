@@ -6,6 +6,9 @@ export TEMP_ROLE
 export AWS_ACCESS_KEY_ID=$(echo "${TEMP_ROLE}" | jq -r '.Credentials.AccessKeyId')
 export AWS_SECRET_ACCESS_KEY=$(echo "${TEMP_ROLE}" | jq -r '.Credentials.SecretAccessKey')
 export AWS_SESSION_TOKEN=$(echo "${TEMP_ROLE}" | jq -r '.Credentials.SessionToken')
+export PC_SAAS_API_ENDPOINT="https://app0.cloud.twistlock.com/app0-93081645"
+export PC_ACCESS_KEY=$(echo $AWS_KEY_ID | jq '.prisma_key' | tr -d '"')
+export PC_ACCESS_KEY=$(echo $AWS_KEY_ID | jq '.prisma_secret' | tr -d '"')
 docker_username=$(echo $AWS_KEY_ID | jq '.docker_username' | tr -d '"')
 docker_pass=$(echo $AWS_KEY_ID | jq '.docker_pass' | tr -d '"')
 export AWS_REGION=$AWS_DEFAULT_REGION
@@ -17,6 +20,12 @@ export AWS_ACCOUNT_ID=`aws sts get-caller-identity --query "Account" --output te
 echo "AWS Access key:" $AWS_ACCESS_KEY_ID
 echo "AWS Account ID:" $AWS_ACCOUNT_ID
 docker build . -t $IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION --build-arg AWS_REGION=$AWS_REGION -f Dockerfile
+curl -k \
+    -u $PC_ACCESSKEY:$PC_SECRETKEY \
+    -X GET -o twistcli \
+"https://app0.cloud.twistlock.com/app0-93081645/api/v1/util/twistcli"
+chmod +x twistcli
+./twistcli images scan --address https://app0.cloud.twistlock.com/app0-93081645 -u $PC_ACCESSKEY -p $PC_SECRETKEY --details --details $IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
 docker tag $IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
 docker tag $IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
 docker logout
