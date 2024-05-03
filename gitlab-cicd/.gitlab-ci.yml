@@ -1,0 +1,66 @@
+variables:
+  PROXY_NAME: "sample-hello-cicd"
+  PROJECT: $TF_VAR_gcp_project
+  APIGEE_ENV: "dev"
+  APIGEE_ORG: $TF_VAR_gcp_project
+  APIGEE_PROFILE: "dev"
+  DEPLOYMENT_SUFFIX: "mysuffix"
+  ENVFILE: "$CI_PROJECT_DIR/build.env"
+  POM: "deploy-apigee-proxy/pom.xml"
+
+stages:
+  - setup
+  - package
+  - deploy
+
+.mvn:
+  image: 
+    name: gcr.io/cloud-builders/mvn
+    entrypoint: ["/bin/sh", "-c"]
+  before_script:
+    - set -x
+    - pwd
+    - env
+    - if [ -f $ENVFILE ]; then ls -latr $ENVFILE; fi;
+    - ls -latr
+
+build_token:
+  stage: setup
+  image: google/cloud-sdk:latest
+  script:
+    - echo ${GOOGLE_APPLICATION_CREDENTIALS} > creds.json
+    - export GOOGLE_APPLICATION_CREDENTIALS=creds.json
+    - gcloud auth application-default print-access-token
+    - export build_token="$(gcloud auth application-default print-access-token)"
+    - echo $build_token
+    - env | grep "build_token" > ${ENVFILE}
+  artifacts:
+    reports:
+      dotenv: ${ENVFILE}
+    untracked: false
+    when: on_success
+    expire_in: "10 minutes"
+      
+
+# Run maven command specifying the process-resources phase so all the configuration files are staged
+# You should see the config files copied to: $HOME/apigee-samples/deploy-apigee-config/target
+'Package Bundle':
+  extends: .mvn
+  stage: package
+  script:
+    - mvn -f ${POM} -ntp process-resources apigee-enterprise:configure -P${APIGEE_PROFILE} -Dorg=${PROJECT} -Ddeployment.suffix="${DEPLOYMENT_SUFFIX}" -Dcommit=${CI_COMMIT_SHORT_SHA} -Dbranch=${CI_COMMIT_BRANCH} -Denv=${_APIGEE_TEST_ENV}
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/deploy-apigee-proxy/target/*
+    when: on_success
+    expire_in: "10 minutes"
+  
+'Deploy bundle':
+  stage: deploy
+  extends: .mvn
+  script:
+    - cd ./deploy-apigee-proxy
+    - mvn -ntp apigee-enterprise:deploy  -P${APIGEE_PROFILE} -Ddeployment.suffix="${DEPLOYMENT_SUFFIX}" -Dorg=${PROJECT} -Dbearer=${build_token} -Denv=$APIGEE_ENV
+
+before_script:
+  - export GOOGLE_APPLICATION_CREDENTIALS=$(echo $BASE64_GOOGLE_CREDENTIALS | base64 -d)
