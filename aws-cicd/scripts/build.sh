@@ -21,7 +21,7 @@ echo "AWS Access key:" $AWS_ACCESS_KEY_ID
 echo "AWS Account ID:" $AWS_ACCOUNT_ID
 docker build . -t $IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION --build-arg AWS_REGION=$AWS_REGION -f Dockerfile
 curl -k \
-    -u $PC_ACCESSKEY:$PC_SECRETKEY \
+    -u $PC_ACCESS_KEY:$PC_SECRET_KEY \
     -X GET -o twistcli \
 "https://app0.cloud.twistlock.com/app0-93081645/api/v1/util/twistcli"
 chmod +x twistcli
