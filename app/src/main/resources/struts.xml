@@ -6,7 +6,7 @@
 <struts>
 
     <constant name="struts.devMode" value="false"/>
-    <!--<constant name="struts.custom.i18n.resources" value="global"/>-->
+    <!--<constant name="struts.custom.i18n.resources" value="global" blah/>-->
     <!-- <constant name="struts.multipart.parser" value="jakarta-stream" /> -->
     <!--constant name="struts.multipart.maxSize" value="1" /-->
 
