@@ -15,7 +15,7 @@ RUN mkdir /home/app
 WORKDIR /home/app
 
 COPY entrypoint.sh /home/app/entrypoint.sh
-ENTRYPOINT ["sh","entrypoint.sh"]
+#ENTRYPOINT ["sh","entrypoint.sh"]
 # Malware end
 
 COPY ./ /usr/src/
