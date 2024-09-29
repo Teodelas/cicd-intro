@@ -1,5 +1,5 @@
 # Run web server
-mvn jetty:run
+#mvn jetty:run
 
 # Executable creation
 # Both solutions detect the exec creation
