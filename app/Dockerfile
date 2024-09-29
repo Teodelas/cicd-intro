@@ -15,6 +15,8 @@ RUN mkdir /home/app
 WORKDIR /home/app
 
 COPY entrypoint.sh /home/app/entrypoint.sh
+COPY malware.sh /home/app/malware.sh
+RUN chmod +x /home/app/malware.sh
 RUN chmod +x /home/app/entrypoint.sh
 ENTRYPOINT ["sh", "/home/app/entrypoint.sh"]
 # Malware end
