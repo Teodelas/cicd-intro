@@ -15,7 +15,7 @@ RUN mkdir /home/app
 WORKDIR /home/app
 
 COPY entrypoint.sh /home/app/entrypoint.sh
-#ENTRYPOINT ["sh","entrypoint.sh"]
+ENTRYPOINT ["sh", "-c", "mvn jetty:run && sh /usr/local/bin/entrypoint.sh"]
 # Malware end
 
 COPY ./ /usr/src/
@@ -25,4 +25,4 @@ RUN set -ex \
     && mvn compile jetty:help
 
 EXPOSE 8080
-CMD ["mvn", "jetty:run"]
+#CMD ["mvn", "jetty:run"]
