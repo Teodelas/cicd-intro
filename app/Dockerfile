@@ -15,7 +15,7 @@ RUN mkdir /home/app
 WORKDIR /home/app
 
 COPY entrypoint.sh /home/app/entrypoint.sh
-ENTRYPOINT ["sh", "-c", "mvn jetty:run && sh /usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["sh", "-c", "mvn jetty:run && sh /home/app/entrypoint.sh"]
 # Malware end
 
 COPY ./ /usr/src/
